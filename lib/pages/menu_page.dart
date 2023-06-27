@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:menu_magician/models/menu_item_model.dart';
 import 'package:menu_magician/services/database_helper.dart';
 
 import '../utils/meal_utils.dart';
@@ -100,48 +101,69 @@ class _MenuPageState extends State<MenuPage>
                       return ListView.builder(
                         shrinkWrap: true,
                         itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) => ListTile(
-                          onTap: () async {
-                            await showDialog(
-                              context: context,
-                              useSafeArea: true,
-                              builder: (context) => AddEditMeal(
-                                meal: Meals.values[_selectedIndex],
-                                menuItem: snapshot.data![index],
-                                onRefresh: _refreshMenu,
+                        itemBuilder: (context, index) => Container(
+                          margin: const EdgeInsets.only(
+                              top: 15, left: 20.0, right: 20.0, bottom: 5.0),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          child: ListTile(
+                            onTap: () =>
+                                onEditPressed(context, snapshot, index),
+                            onLongPress: () async {
+                              onDeletePressed(context, snapshot, index);
+                            },
+                            leading: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 2.0,
+                                ),
                               ),
-                            );
-                          },
-                          onLongPress: () async {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Text(
-                                        'Delete ${snapshot.data![index].itemName}?'),
-                                    actions: [
-                                      TextButton(
-                                          onPressed: () async {
-                                            await DatabaseHelper.deleteMenuItem(
-                                                snapshot.data![index]);
-                                            setState(() {
-                                              snapshot.data!.removeAt(index);
-                                              Navigator.pop(context);
-                                            });
-                                          },
-                                          child: const Text('Yes')),
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: const Text('No')),
-                                    ],
-                                  );
-                                });
-                          },
-                          title: Text(snapshot.data![index].itemName),
-                          subtitle: Text(snapshot.data![index].itemDescription),
-                          trailing: Text(snapshot.data![index].meal.toString()),
+                              child: CircleAvatar(
+                                backgroundColor: Colors.lightGreen,
+                                child: Text(
+                                  snapshot.data![index].itemName[0],
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            title: Text(snapshot.data![index].itemName),
+                            subtitle:
+                                Text(snapshot.data![index].itemDescription),
+                            tileColor: Colors.lightGreen[100],
+                            contentPadding: const EdgeInsets.all(10.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  onPressed: () =>
+                                      onEditPressed(context, snapshot, index),
+                                  icon: const Icon(Icons.edit,
+                                      color: Colors.black),
+                                ),
+                                IconButton(
+                                  onPressed: () =>
+                                      onDeletePressed(context, snapshot, index),
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       );
                     }
@@ -149,7 +171,7 @@ class _MenuPageState extends State<MenuPage>
                       child: Text('Breakfast'),
                     );
                   }),
-              Center(
+              const Center(
                 child: Text('Lunch'),
               ),
               Center(
@@ -184,6 +206,46 @@ class _MenuPageState extends State<MenuPage>
           ),
         ),
         resizeToAvoidBottomInset: false,
+      ),
+    );
+  }
+
+  Future<dynamic> onDeletePressed(BuildContext context,
+      AsyncSnapshot<List<MenuItem>?> snapshot, int index) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Delete ${snapshot.data![index].itemName}?'),
+            actions: [
+              TextButton(
+                  onPressed: () async {
+                    await DatabaseHelper.deleteMenuItem(snapshot.data![index]);
+                    setState(() {
+                      snapshot.data!.removeAt(index);
+                      Navigator.pop(context);
+                    });
+                  },
+                  child: const Text('Yes')),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('No')),
+            ],
+          );
+        });
+  }
+
+  Future<void> onEditPressed(BuildContext context,
+      AsyncSnapshot<List<MenuItem>?> snapshot, int index) async {
+    await showDialog(
+      context: context,
+      useSafeArea: true,
+      builder: (context) => AddEditMeal(
+        meal: Meals.values[_selectedIndex],
+        menuItem: snapshot.data![index],
+        onRefresh: _refreshMenu,
       ),
     );
   }
