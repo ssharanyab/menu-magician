@@ -58,4 +58,43 @@ class DatabaseHelper {
       return MenuItem.fromJson(maps[i]);
     });
   }
+
+  /// Get all [MenuItem]s from the database for Breakfast.
+  static Future<List<MenuItem>?> getBreakfastMenu() async {
+    final db = await _getDB();
+    final List<Map<String, dynamic>> maps = await db
+        .query('MenuItems', where: 'meal = ?', whereArgs: ['Breakfast']);
+    if (maps.isEmpty) {
+      return null;
+    }
+    return List.generate(maps.length, (i) {
+      return MenuItem.fromJson(maps[i]);
+    });
+  }
+
+  /// Get all [MenuItem]s from the database for Lunch.
+  static Future<List<MenuItem>?> getLunchMenu() async {
+    final db = await _getDB();
+    final List<Map<String, dynamic>> maps =
+        await db.query('MenuItems', where: 'meal = ?', whereArgs: ['Lunch']);
+    if (maps.isEmpty) {
+      return null;
+    }
+    return List.generate(maps.length, (i) {
+      return MenuItem.fromJson(maps[i]);
+    });
+  }
+
+  /// Get all [MenuItem]s from the database for Dinner.
+  static Future<List<MenuItem>?> getDinnerMenu() async {
+    final db = await _getDB();
+    final List<Map<String, dynamic>> maps =
+        await db.query('MenuItems', where: 'meal = ?', whereArgs: ['Dinner']);
+    if (maps.isEmpty) {
+      return null;
+    }
+    return List.generate(maps.length, (i) {
+      return MenuItem.fromJson(maps[i]);
+    });
+  }
 }

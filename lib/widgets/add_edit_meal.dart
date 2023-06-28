@@ -108,74 +108,95 @@ class _AddEditMealState extends State<AddEditMeal>
             const EdgeInsets.symmetric(horizontal: 0.0, vertical: 10.0),
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.3,
+          height: MediaQuery.of(context).size.height * 0.33,
           child: Form(
             key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Select a meal',
-                    labelStyle: const TextStyle(
-                      fontSize: 18.0,
+            child: SingleChildScrollView(
+              physics: const ScrollPhysics(),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Select a meal',
+                      labelStyle: const TextStyle(
+                        fontSize: 18.0,
+                      ),
+                      enabledBorder: buildEnabledBorder(),
+                      focusedBorder: buildFocusedBorder(),
                     ),
-                    enabledBorder: buildEnabledBorder(),
-                    focusedBorder: buildFocusedBorder(),
+                    elevation: 0,
+                    icon: const Icon(CupertinoIcons.chevron_down),
+                    value: widget.menuItem != null
+                        ? Meals.values
+                            .where((element) =>
+                                element.mealName == widget.menuItem!.meal)
+                            .first
+                        : _meal,
+                    onChanged: (value) {
+                      setState(() {
+                        _meal = value!;
+                      });
+                    },
+                    items: Meals.values.map((meal) {
+                      return DropdownMenuItem(
+                        value: meal,
+                        child: Text(meal.mealName),
+                      );
+                    }).toList(),
                   ),
-                  elevation: 0,
-                  icon: const Icon(CupertinoIcons.chevron_down),
-                  value: widget.menuItem != null
-                      ? Meals.values
-                          .where((element) =>
-                              element.mealName == widget.menuItem!.meal)
-                          .first
-                      : _meal,
-                  onChanged: (value) {
-                    setState(() {
-                      _meal = value!;
-                    });
-                  },
-                  items: Meals.values.map((meal) {
-                    return DropdownMenuItem(
-                      value: meal,
-                      child: Text(meal.mealName),
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                TextFormField(
-                  controller: _mealNameController,
-                  decoration: InputDecoration(
-                    labelText: 'Enter the item name',
-                    labelStyle: const TextStyle(
-                      fontSize: 18.0,
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  TextFormField(
+                    controller: _mealNameController,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter the item name';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Enter the item name',
+                      labelStyle: const TextStyle(
+                        fontSize: 18.0,
+                      ),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      enabledBorder: buildEnabledBorder(),
+                      focusedBorder: buildFocusedBorder(),
+                      errorBorder: buildErrorBorder(),
+                      focusedErrorBorder: buildErrorBorder(),
                     ),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    enabledBorder: buildEnabledBorder(),
-                    focusedBorder: buildFocusedBorder(),
                   ),
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                TextFormField(
-                  controller: _mealDescriptionController,
-                  maxLines: 3,
-                  minLines: 3,
-                  decoration: InputDecoration(
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    labelText: 'Enter the item Description',
-                    labelStyle: const TextStyle(
-                      fontSize: 18.0,
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  TextFormField(
+                    controller: _mealDescriptionController,
+                    maxLines: 3,
+                    minLines: 3,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter the item description';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      labelText: 'Enter the item Description',
+                      labelStyle: const TextStyle(
+                        fontSize: 18.0,
+                      ),
+                      enabledBorder: buildEnabledBorder(),
+                      focusedBorder: buildFocusedBorder(),
+                      errorBorder: buildErrorBorder(),
+                      focusedErrorBorder: buildErrorBorder(),
                     ),
-                    enabledBorder: buildEnabledBorder(),
-                    focusedBorder: buildFocusedBorder(),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -187,6 +208,7 @@ class _AddEditMealState extends State<AddEditMeal>
               final itemName = _mealNameController.text;
               final itemDescription = _mealDescriptionController.text;
               if (itemName.isEmpty || itemDescription.isEmpty) {
+                _formKey.currentState!.validate();
                 return;
               }
               final menuItem = MenuItem(
@@ -247,6 +269,18 @@ class _AddEditMealState extends State<AddEditMeal>
     return const OutlineInputBorder(
       borderSide: BorderSide(
         color: Colors.lightGreen,
+        width: 2.0,
+      ),
+      borderRadius: BorderRadius.all(
+        Radius.circular(10.0),
+      ),
+    );
+  }
+
+  OutlineInputBorder buildErrorBorder() {
+    return const OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.red,
         width: 2.0,
       ),
       borderRadius: BorderRadius.all(

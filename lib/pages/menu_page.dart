@@ -91,7 +91,7 @@ class _MenuPageState extends State<MenuPage>
             physics: const NeverScrollableScrollPhysics(),
             children: [
               FutureBuilder(
-                  future: DatabaseHelper.getMenuItems(),
+                  future: DatabaseHelper.getBreakfastMenu(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       return Center(
@@ -171,12 +171,168 @@ class _MenuPageState extends State<MenuPage>
                       child: Text('Breakfast'),
                     );
                   }),
-              const Center(
-                child: Text('Lunch'),
-              ),
-              Center(
-                child: Text('Dinner'),
-              ),
+              FutureBuilder(
+                  future: DatabaseHelper.getLunchMenu(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    } else if (snapshot.hasData) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) => Container(
+                          margin: const EdgeInsets.only(
+                              top: 15, left: 20.0, right: 20.0, bottom: 5.0),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          child: ListTile(
+                            onTap: () =>
+                                onEditPressed(context, snapshot, index),
+                            onLongPress: () async {
+                              onDeletePressed(context, snapshot, index);
+                            },
+                            leading: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 2.0,
+                                ),
+                              ),
+                              child: CircleAvatar(
+                                backgroundColor: Colors.lightGreen,
+                                child: Text(
+                                  snapshot.data![index].itemName[0],
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            title: Text(snapshot.data![index].itemName),
+                            subtitle:
+                                Text(snapshot.data![index].itemDescription),
+                            tileColor: Colors.lightGreen[100],
+                            contentPadding: const EdgeInsets.all(10.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  onPressed: () =>
+                                      onEditPressed(context, snapshot, index),
+                                  icon: const Icon(Icons.edit,
+                                      color: Colors.black),
+                                ),
+                                IconButton(
+                                  onPressed: () =>
+                                      onDeletePressed(context, snapshot, index),
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                    return const Center(
+                      child: Text('Lunch'),
+                    );
+                  }),
+              FutureBuilder(
+                  future: DatabaseHelper.getDinnerMenu(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    } else if (snapshot.hasData) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) => Container(
+                          margin: const EdgeInsets.only(
+                              top: 15, left: 20.0, right: 20.0, bottom: 5.0),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          child: ListTile(
+                            onTap: () =>
+                                onEditPressed(context, snapshot, index),
+                            onLongPress: () async {
+                              onDeletePressed(context, snapshot, index);
+                            },
+                            leading: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 2.0,
+                                ),
+                              ),
+                              child: CircleAvatar(
+                                backgroundColor: Colors.lightGreen,
+                                child: Text(
+                                  snapshot.data![index].itemName[0],
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            title: Text(snapshot.data![index].itemName),
+                            subtitle:
+                                Text(snapshot.data![index].itemDescription),
+                            tileColor: Colors.lightGreen[100],
+                            contentPadding: const EdgeInsets.all(10.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  onPressed: () =>
+                                      onEditPressed(context, snapshot, index),
+                                  icon: const Icon(Icons.edit,
+                                      color: Colors.black),
+                                ),
+                                IconButton(
+                                  onPressed: () =>
+                                      onDeletePressed(context, snapshot, index),
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                    return const Center(
+                      child: Text('Dinner'),
+                    );
+                  }),
             ],
           ),
         ),

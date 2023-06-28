@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:menu_magician/pages/menu_page.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:menu_magician/pages/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,12 +12,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Menu Magician',
       theme: ThemeData(
         primarySwatch: Colors.lightGreen,
       ),
-      home: MenuPage(),
+      home: HomePage(),
     );
   }
 }
