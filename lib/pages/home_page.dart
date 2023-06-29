@@ -4,6 +4,8 @@ import 'package:menu_magician/pages/menu_page.dart';
 import 'package:menu_magician/pages/spin_page.dart';
 
 import '../widgets/carousal_button.dart';
+import '../widgets/carousal_card.dart';
+import '../widgets/drawer_list_tile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,49 +18,95 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.lightGreen[100],
       appBar: AppBar(
         elevation: 0,
+        backgroundColor: Colors.lightGreen[100],
       ),
       drawer: Drawer(
+        width: 250,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(20.0),
+            bottomRight: Radius.circular(20.0),
+          ),
+        ),
+        shadowColor: Colors.black,
+        elevation: 10.0,
+        surfaceTintColor: Colors.white,
+        backgroundColor: Colors.lightGreen[200],
         child: ListView(
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.lightGreen,
-              ),
-              child: Text(
-                'Menu Magician',
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
+            Container(
+              height: 150,
+              constraints: const BoxConstraints.expand(height: 150),
+              child: DrawerHeader(
+                margin: EdgeInsets.zero,
+                decoration: BoxDecoration(
+                  color: Colors.lightGreen[200],
+                ),
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          SizedBox(
+                            width: 150,
+                            child: Text(
+                              'Menu Magician',
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            'Your menu, your way!',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Image.asset(
+                        'assets/images/magician.png',
+                        width: 90,
+                        height: 100,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            ListTile(
-              title: const Text('Menu'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    transitionsBuilder:
-                        (context, animation1, animation2, child) =>
-                            SlideTransition(
-                                position: Tween<Offset>(
-                                  begin: const Offset(1.0, 0.0),
-                                  end: Offset.zero,
-                                ).animate(animation1),
-                                child: child),
-                    pageBuilder: (context, animation1, animation2) =>
-                        const MenuPage(),
-                  ),
-                );
-              },
+            const DrawerListTile(
+              title: 'Menu',
+              subtitle: 'Add or edit your menu',
+              icon: Icons.menu_book,
+              page: MenuPage(),
+            ),
+            const DrawerListTile(
+              title: 'Spin',
+              subtitle: 'Decide your meal',
+              icon: Icons.gamepad,
+              page: SpinPage(),
             ),
           ],
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -299,9 +347,9 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 10.0,
             ),
-            Text(
+            const Text(
               'Breakfast: ',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -309,9 +357,9 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 10.0,
             ),
-            Text(
+            const Text(
               'Lunch: ',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -319,9 +367,9 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 10.0,
             ),
-            Text(
+            const Text(
               'Dinner: ',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -329,28 +377,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class CarousalCard extends StatelessWidget {
-  const CarousalCard({
-    required this.child,
-    super.key,
-  });
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.all(20.0),
-      decoration: BoxDecoration(
-        color: Colors.lightGreen[100],
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      child: child,
     );
   }
 }
