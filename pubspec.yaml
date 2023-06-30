@@ -38,6 +38,7 @@ dependencies:
   get: ^4.6.5
   sqflite: ^2.2.8+4
   flutter_carousel_widget: ^2.0.4
+  flip_card: ^0.7.0
 
 
 dev_dependencies:

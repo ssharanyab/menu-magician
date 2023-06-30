@@ -1,3 +1,4 @@
+import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:menu_magician/pages/menu_page.dart';
@@ -109,7 +110,7 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FlutterCarousel(
               items: [
@@ -335,7 +336,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(
-              height: 20.0,
+              height: 30.0,
             ),
             const Text(
               'Today on your plate:',
@@ -345,37 +346,204 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(
-              height: 10.0,
+              height: 30.0,
             ),
-            const Text(
-              'Breakfast: ',
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-              ),
+            Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    FlipCard(
+                      fill: Fill.fillBack,
+                      direction: FlipDirection.HORIZONTAL, // default
+                      side: CardSide.FRONT,
+                      flipOnTouch: true, // The side to initially display.
+                      front: Container(
+                        width: 170.0,
+                        height: 170.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 5.0,
+                              spreadRadius: 2.0,
+                            ),
+                          ],
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Breakfast',
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      back: Container(
+                        width: 170.0,
+                        height: 170.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.lightGreen,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 5.0,
+                              spreadRadius: 2.0,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    FlipCard(
+                      fill: Fill.fillBack,
+                      direction: FlipDirection.HORIZONTAL, // default
+                      side: CardSide.FRONT,
+                      flipOnTouch: true, // The side to initially display.
+                      front: Container(
+                        width: 170.0,
+                        height: 170.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 5.0,
+                              spreadRadius: 2.0,
+                            ),
+                          ],
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Lunch',
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      back: Container(
+                        width: 170.0,
+                        height: 170.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.lightGreen,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 5.0,
+                              spreadRadius: 2.0,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                FlipCard(
+                  fill: Fill.fillBack,
+                  direction: FlipDirection.HORIZONTAL, // default
+                  side: CardSide.FRONT,
+                  flipOnTouch: true, // The side to initially display.
+                  front: Container(
+                    width: 170.0,
+                    height: 170.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 5.0,
+                          spreadRadius: 2.0,
+                        ),
+                      ],
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Dinner',
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  back: Container(
+                      width: 170.0,
+                      height: 170.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.lightGreen,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 5.0,
+                            spreadRadius: 2.0,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 2.0,
+                              ),
+                            ),
+                            child: const CircleAvatar(
+                              backgroundColor: Colors.lightGreen,
+                              child: Text(
+                                'P',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          const Text(
+                            'Pasta',
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          const Text(
+                            'Pasta with tomato sauce',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+              ],
             ),
             const SizedBox(
               height: 10.0,
-            ),
-            const Text(
-              'Lunch: ',
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(
-              height: 10.0,
-            ),
-            const Text(
-              'Dinner: ',
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-              ),
             ),
           ],
         ),
+      ),
+      // Make a bottombar
+      bottomNavigationBar: Container(
+        color: Colors.lightGreen[200],
+        height: 60.0,
       ),
     );
   }
