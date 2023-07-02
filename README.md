@@ -1,7 +1,7 @@
 # menu_magician
 
-An app that helps you decide your meal
+An app that decides your meal for the day.
 
 ## Tech Stacks
-- Database: SQLite(`sqflite` package)
-- 
+- Database: SQLite (`sqflite` package)
+- State Management: GetX (`get` package)
