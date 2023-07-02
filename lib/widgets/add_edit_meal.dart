@@ -141,10 +141,27 @@ class _AddEditMealState extends State<AddEditMeal>
                     items: Meals.values.map((meal) {
                       return DropdownMenuItem(
                         value: meal,
-                        child: Text(meal.mealName),
+                        child: Row(
+                          children: [
+                            Icon(
+                              meal.mealIcon,
+                              color: Colors.black,
+                            ),
+                            const SizedBox(
+                              width: 10.0,
+                            ),
+                            Text(meal.mealName),
+                          ],
+                        ),
                       );
                     }).toList(),
                   ),
+                  // MealDropDown(
+                  //   meal: _meal,
+                  //   buildEnabledBorder: buildEnabledBorder(),
+                  //   buildFocusedBorder: buildFocusedBorder(),
+                  //   menuItem: widget.menuItem,
+                  // ),
                   const SizedBox(
                     height: 20.0,
                   ),

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 enum Meals { breakfast, lunch, dinner }
 
 extension MealsExtension on Meals {
@@ -11,6 +13,19 @@ extension MealsExtension on Meals {
         return 'Dinner';
       default:
         return '';
+    }
+  }
+
+  IconData get mealIcon {
+    switch (this) {
+      case Meals.breakfast:
+        return Icons.coffee_rounded;
+      case Meals.lunch:
+        return Icons.ramen_dining;
+      case Meals.dinner:
+        return Icons.fastfood;
+      default:
+        return Icons.eco;
     }
   }
 
