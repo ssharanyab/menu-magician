@@ -445,92 +445,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                FlipCard(
-                  fill: Fill.fillBack,
-                  direction: FlipDirection.HORIZONTAL, // default
-                  side: CardSide.FRONT,
-                  flipOnTouch: true, // The side to initially display.
-                  front: Container(
-                    width: 170.0,
-                    height: 170.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          blurRadius: 5.0,
-                          spreadRadius: 2.0,
-                        ),
-                      ],
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Dinner',
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  back: Container(
-                      width: 170.0,
-                      height: 170.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.lightGreen,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
-                            blurRadius: 5.0,
-                            spreadRadius: 2.0,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 2.0,
-                              ),
-                            ),
-                            child: const CircleAvatar(
-                              backgroundColor: Colors.lightGreen,
-                              child: Text(
-                                'P',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          const Text(
-                            'Pasta',
-                            style: TextStyle(
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10.0,
-                          ),
-                          const Text(
-                            'Pasta with tomato sauce',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ],
-                      )),
+                TodayPlate(
+                  plate: 'Dinner',
                 ),
               ],
             ),
@@ -545,6 +461,106 @@ class _HomePageState extends State<HomePage> {
         color: Colors.lightGreen[200],
         height: 60.0,
       ),
+    );
+  }
+}
+
+class TodayPlate extends StatelessWidget {
+  const TodayPlate({
+    required this.plate,
+    super.key,
+  });
+
+  final String plate;
+
+  @override
+  Widget build(BuildContext context) {
+    return FlipCard(
+      fill: Fill.fillBack,
+      direction: FlipDirection.HORIZONTAL, // default
+      side: CardSide.FRONT,
+      flipOnTouch: true, // The side to initially display.
+      front: Container(
+        width: 170.0,
+        height: 170.0,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 5.0,
+              spreadRadius: 2.0,
+            ),
+          ],
+        ),
+        child: Center(
+          child: Text(
+            plate,
+            style: const TextStyle(
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      back: Container(
+          width: 170.0,
+          height: 170.0,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.lightGreen,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 5.0,
+                spreadRadius: 2.0,
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 2.0,
+                  ),
+                ),
+                child: const CircleAvatar(
+                  backgroundColor: Colors.lightGreen,
+                  child: Text(
+                    'P',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
+              const Text(
+                'Pasta',
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              const Text(
+                'Pasta with tomato sauce',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ],
+          )),
     );
   }
 }
