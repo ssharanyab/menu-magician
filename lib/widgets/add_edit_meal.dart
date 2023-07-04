@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:menu_magician/models/menu_item_model.dart';
 
 import '../services/database_helper.dart';
+import '../utils/border_utils.dart';
 import '../utils/meal_utils.dart';
 import 'meal_dropdown.dart';
 
@@ -245,42 +246,6 @@ class _AddEditMealState extends State<AddEditMeal>
             width: 2.0,
           ),
         ),
-      ),
-    );
-  }
-
-  OutlineInputBorder buildFocusedBorder() {
-    return const OutlineInputBorder(
-      borderSide: BorderSide(
-        color: Colors.lightGreen,
-        width: 2.0,
-      ),
-      borderRadius: BorderRadius.all(
-        Radius.circular(10.0),
-      ),
-    );
-  }
-
-  OutlineInputBorder buildErrorBorder() {
-    return const OutlineInputBorder(
-      borderSide: BorderSide(
-        color: Colors.red,
-        width: 2.0,
-      ),
-      borderRadius: BorderRadius.all(
-        Radius.circular(10.0),
-      ),
-    );
-  }
-
-  OutlineInputBorder buildEnabledBorder() {
-    return const OutlineInputBorder(
-      borderSide: BorderSide(
-        color: Colors.black,
-        width: 1.0,
-      ),
-      borderRadius: BorderRadius.all(
-        Radius.circular(10.0),
       ),
     );
   }

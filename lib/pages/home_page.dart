@@ -445,7 +445,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                TodayPlate(
+                const TodayPlate(
                   plate: 'Dinner',
                 ),
               ],

@@ -4,10 +4,16 @@ import 'package:menu_magician/services/database_helper.dart';
 
 class MenuItemController extends GetxController {
   final isLoading = false.obs;
-  List<MenuItem>? menuItem;
+
+  // All Items : Menu items for each meal
   List<MenuItem>? breakfastMenu;
   List<MenuItem>? lunchMenu;
   List<MenuItem>? dinnerMenu;
+
+  // Today's Items : Menu items for each meal
+  List<MenuItem>? todayBreakfastMenu;
+  List<MenuItem>? todayLunchMenu;
+  List<MenuItem>? todayDinnerMenu;
 
   @override
   Future<void> onInit() async {

@@ -42,3 +42,15 @@ extension MealsExtension on Meals {
     }
   }
 }
+
+// function to get the meal from the time
+Meals getMealFromTime() {
+  final now = DateTime.now();
+  if (now.hour < 11) {
+    return Meals.breakfast;
+  } else if (now.hour < 15) {
+    return Meals.lunch;
+  } else {
+    return Meals.dinner;
+  }
+}

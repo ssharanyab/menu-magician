@@ -12,6 +12,7 @@ class MealDropDown extends StatefulWidget {
     required this.meal,
     required this.onMealChanged,
     this.menuItem,
+    this.dropdownColor,
   }) : super(key: key);
 
   final OutlineInputBorder buildEnabledBorder;
@@ -19,6 +20,7 @@ class MealDropDown extends StatefulWidget {
   final Meals meal;
   final MenuItem? menuItem;
   final ValueChanged<Meals> onMealChanged;
+  final Color? dropdownColor;
 
   @override
   State<MealDropDown> createState() => _MealDropDownState();
@@ -57,6 +59,7 @@ class _MealDropDownState extends State<MealDropDown> {
           _meal = value;
         });
       },
+      dropdownColor: widget.dropdownColor ?? Colors.white,
       items: Meals.values.map((meal) {
         return DropdownMenuItem(
           value: meal,

@@ -39,6 +39,7 @@ dependencies:
   sqflite: ^2.2.8+4
   flutter_carousel_widget: ^2.0.4
   flip_card: ^0.7.0
+  flutter_fortune_wheel: ^1.2.1
 
 
 dev_dependencies:
