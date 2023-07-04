@@ -49,4 +49,10 @@ class MenuItemController extends GetxController {
       isLoading(false);
     }
   }
+
+  refreshMenu() {
+    fetchBreakfastMenu();
+    fetchLunchMenu();
+    fetchDinnerMenu();
+  }
 }

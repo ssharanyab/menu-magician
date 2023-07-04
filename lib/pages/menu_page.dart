@@ -47,17 +47,7 @@ class _MenuPageState extends State<MenuPage>
   }
 
   void _refreshMenu() {
-    switch (_selectedIndex) {
-      case 0:
-        menuItemController.fetchBreakfastMenu();
-        break;
-      case 1:
-        menuItemController.fetchLunchMenu();
-        break;
-      case 2:
-        menuItemController.fetchDinnerMenu();
-        break;
-    }
+    menuItemController.refreshMenu();
     setState(() {});
   }
 
