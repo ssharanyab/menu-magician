@@ -4,6 +4,7 @@ import 'package:menu_magician/models/menu_item_model.dart';
 
 import '../services/database_helper.dart';
 import '../utils/meal_utils.dart';
+import 'meal_dropdown.dart';
 
 class AddEditMeal extends StatefulWidget {
   const AddEditMeal({
@@ -68,8 +69,13 @@ class _AddEditMealState extends State<AddEditMeal>
   @override
   void dispose() {
     _controller.dispose();
-
     super.dispose();
+  }
+
+  void onMealChanged(Meals value) {
+    setState(() {
+      _meal = value;
+    });
   }
 
   @override
@@ -116,52 +122,13 @@ class _AddEditMealState extends State<AddEditMeal>
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Select a meal',
-                      labelStyle: const TextStyle(
-                        fontSize: 18.0,
-                      ),
-                      enabledBorder: buildEnabledBorder(),
-                      focusedBorder: buildFocusedBorder(),
-                    ),
-                    elevation: 0,
-                    icon: const Icon(CupertinoIcons.chevron_down),
-                    value: widget.menuItem != null
-                        ? Meals.values
-                            .where((element) =>
-                                element.mealName == widget.menuItem!.meal)
-                            .first
-                        : _meal,
-                    onChanged: (value) {
-                      setState(() {
-                        _meal = value!;
-                      });
-                    },
-                    items: Meals.values.map((meal) {
-                      return DropdownMenuItem(
-                        value: meal,
-                        child: Row(
-                          children: [
-                            Icon(
-                              meal.mealIcon,
-                              color: Colors.black,
-                            ),
-                            const SizedBox(
-                              width: 10.0,
-                            ),
-                            Text(meal.mealName),
-                          ],
-                        ),
-                      );
-                    }).toList(),
+                  MealDropDown(
+                    meal: _meal,
+                    buildEnabledBorder: buildEnabledBorder(),
+                    buildFocusedBorder: buildFocusedBorder(),
+                    menuItem: widget.menuItem,
+                    onMealChanged: onMealChanged,
                   ),
-                  // MealDropDown(
-                  //   meal: _meal,
-                  //   buildEnabledBorder: buildEnabledBorder(),
-                  //   buildFocusedBorder: buildFocusedBorder(),
-                  //   menuItem: widget.menuItem,
-                  // ),
                   const SizedBox(
                     height: 20.0,
                   ),
