@@ -35,6 +35,9 @@ class _SpinPageState extends State<SpinPage> {
   int selectedMenuItemIndex = 0;
   bool selectionMade = false;
 
+  bool initialSpin = true;
+  bool spinning = false;
+
   MenuItemController menuItemController = Get.put(MenuItemController());
   StreamController<int> selected = StreamController.broadcast();
   Random random = Random();
@@ -151,6 +154,7 @@ class _SpinPageState extends State<SpinPage> {
                   ),
                 ],
               ),
+              const SizedBox(height: 30.0),
               Container(
                 width: 300.0,
                 height: 300.0,
@@ -185,11 +189,14 @@ class _SpinPageState extends State<SpinPage> {
                           onAnimationStart: () {
                             setState(() {
                               selectionMade = false;
+                              initialSpin = false;
+                              spinning = true;
                             });
                           },
                           onAnimationEnd: () {
                             setState(() {
                               selectionMade = true;
+                              spinning = false;
                             });
                           },
                           items: [
@@ -203,29 +210,87 @@ class _SpinPageState extends State<SpinPage> {
                         ),
                       ),
               ),
-              const Text(
-                'Spin the wheel to decide what to eat!',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              selectionMade
-                  ? Text(
-                      selectedMenuItem,
-                      style: const TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  : const SizedBox(),
+              const SizedBox(height: 50.0),
+              SizedBox(
+                  width: 350.0,
+                  child: selectionMade
+                      ? RichText(
+                          text: TextSpan(
+                              text: 'You are eating ',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.normal,
+                                fontStyle: FontStyle.italic,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: selectedMenuItem,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.lightGreen[900],
+                                    fontStyle: FontStyle.normal,
+                                  ),
+                                ),
+                                const TextSpan(
+                                  text: 'for your',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                                TextSpan(
+                                  text: ' ${meal.mealName}!',
+                                  style: TextStyle(
+                                    color: Colors.lightGreen[900],
+                                    fontStyle: FontStyle.normal,
+                                  ),
+                                ),
+                                const TextSpan(
+                                  text: '\n\nSpin again if you don\'t like it!',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                              ]),
+                          textAlign: TextAlign.center,
+                        )
+                      : initialSpin
+                          ? const Text(
+                              'Spin the wheel to decide what to eat!',
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            )
+                          : const Text(
+                              'Spinning...',
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            )),
               const SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  print(selectedMenuItem);
-                },
-                child: const Text('Spin'),
-              ),
+              !spinning
+                  ? ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        side: const BorderSide(
+                          color: Colors.black,
+                          width: 2.0,
+                        ),
+                        elevation: 0.0,
+                      ),
+                      onPressed: () => spinWheel(),
+                      child: initialSpin
+                          ? const Text('Spin Now')
+                          : const Text('Spin Again'),
+                    )
+                  : const SizedBox.shrink(),
             ],
           ),
         ),
