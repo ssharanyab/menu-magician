@@ -279,8 +279,6 @@ class _HomePageState extends State<HomePage> {
                             label: 'Spin Now!',
                             icon: Icons.gamepad,
                             onPressed: () {
-                              //TODO: Remove this print statement (for debugging purposes only
-
                               Navigator.push(
                                 context,
                                 PageRouteBuilder(

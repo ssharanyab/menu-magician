@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -30,7 +31,12 @@ class _SpinPageState extends State<SpinPage> {
   late List<MenuItem> menuItems;
   List<String> menuItemsNames = [];
 
+  String selectedMenuItem = '';
+  int selectedMenuItemIndex = 0;
+  bool selectionMade = false;
+
   MenuItemController menuItemController = Get.put(MenuItemController());
+  StreamController<int> selected = StreamController.broadcast();
   Random random = Random();
 
   @override
@@ -38,6 +44,7 @@ class _SpinPageState extends State<SpinPage> {
     super.initState();
     meal = widget.meal ?? getMealFromTime();
     getMenuItems();
+    selected.stream.listen((value) {});
   }
 
   void getMenuItems() {
@@ -129,7 +136,7 @@ class _SpinPageState extends State<SpinPage> {
                             );
                           });
                     },
-                    label: Text(
+                    label: const Text(
                       'Edit Items',
                       style: TextStyle(
                         fontSize: 14.0,
@@ -148,7 +155,7 @@ class _SpinPageState extends State<SpinPage> {
                 width: 300.0,
                 height: 300.0,
                 child: menuItemsNames.length < 2
-                    ? Center(
+                    ? const Center(
                         child: Text(
                           'Please add and select at least 2 items to spin and decide!',
                           style: TextStyle(
@@ -158,15 +165,42 @@ class _SpinPageState extends State<SpinPage> {
                           textAlign: TextAlign.center,
                         ),
                       )
-                    : FortuneWheel(
-                        items: [
-                          for (var item in menuItemsNames)
-                            FortuneItem(
-                              child: Text(
-                                item,
+                    : GestureDetector(
+                        onTap: () => spinWheel(),
+                        onVerticalDragStart: (details) => spinWheel(),
+                        onHorizontalDragStart: (details) => spinWheel(),
+                        child: FortuneWheel(
+                          animateFirst: false,
+                          selected: selected.stream,
+                          duration: const Duration(seconds: 5),
+                          physics: CircularPanPhysics(
+                            duration: Duration(seconds: 5),
+                            curve: Curves.decelerate,
+                          ),
+                          onFling: () {
+                            setState(() {
+                              menuItemsNames.shuffle();
+                            });
+                          },
+                          onAnimationStart: () {
+                            setState(() {
+                              selectionMade = false;
+                            });
+                          },
+                          onAnimationEnd: () {
+                            setState(() {
+                              selectionMade = true;
+                            });
+                          },
+                          items: [
+                            for (var item in menuItemsNames)
+                              FortuneItem(
+                                child: Text(
+                                  item,
+                                ),
                               ),
-                            ),
-                        ],
+                          ],
+                        ),
                       ),
               ),
               const Text(
@@ -176,9 +210,20 @@ class _SpinPageState extends State<SpinPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              selectionMade
+                  ? Text(
+                      selectedMenuItem,
+                      style: const TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  : const SizedBox(),
               const SizedBox(height: 20.0),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  print(selectedMenuItem);
+                },
                 child: const Text('Spin'),
               ),
             ],
@@ -186,5 +231,13 @@ class _SpinPageState extends State<SpinPage> {
         ),
       ),
     );
+  }
+
+  void spinWheel() {
+    selectedMenuItemIndex = Fortune.randomInt(0, menuItemsNames.length);
+    setState(() {
+      selected.add(selectedMenuItemIndex);
+      selectedMenuItem = menuItemsNames[selectedMenuItemIndex];
+    });
   }
 }
