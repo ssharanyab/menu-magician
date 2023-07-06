@@ -70,6 +70,9 @@ class _SpinPageState extends State<SpinPage> {
       meal = value;
       menuItemsNames = [];
       getMenuItems();
+      initialSpin = true;
+      selectionMade = false;
+      spinning = false;
     });
   }
 
@@ -155,7 +158,7 @@ class _SpinPageState extends State<SpinPage> {
                 ],
               ),
               const SizedBox(height: 30.0),
-              Container(
+              SizedBox(
                 width: 300.0,
                 height: 300.0,
                 child: menuItemsNames.length < 2
