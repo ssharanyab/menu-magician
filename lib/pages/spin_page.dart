@@ -122,6 +122,7 @@ class _SpinPageState extends State<SpinPage> {
                           context: context,
                           builder: (BuildContext context) {
                             return ShowHideMenuItems(
+                              meal: meal,
                               menuItems: menuItems,
                               selectedItems: menuItemsNames,
                               updateSelectedItems: updateMenuItems,

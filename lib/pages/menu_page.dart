@@ -10,7 +10,12 @@ import '../widgets/menu_item_card.dart';
 import '../widgets/tab_bar_icon.dart';
 
 class MenuPage extends StatefulWidget {
-  const MenuPage({Key? key}) : super(key: key);
+  const MenuPage({
+    Key? key,
+    this.index,
+  }) : super(key: key);
+
+  final int? index;
 
   @override
   State<MenuPage> createState() => _MenuPageState();
@@ -30,6 +35,8 @@ class _MenuPageState extends State<MenuPage>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _tabController.index = widget.index ?? 0;
+    _selectedIndex = _tabController.index;
     _tabController.addListener(() => _onTabChanged(_tabController.index));
   }
 
@@ -55,6 +62,7 @@ class _MenuPageState extends State<MenuPage>
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
+      initialIndex: widget.index ?? 0,
       child: Scaffold(
         backgroundColor: Colors.lightGreen[100],
         appBar: AppBar(

@@ -36,6 +36,7 @@ class _MenuItemCardState extends State<MenuItemCard> {
         : ListView.builder(
             shrinkWrap: true,
             itemCount: widget.menuItems.length,
+            physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) => Container(
               margin: const EdgeInsets.only(
                   top: 15, left: 20.0, right: 20.0, bottom: 5.0),
