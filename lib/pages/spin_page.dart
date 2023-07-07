@@ -8,6 +8,7 @@ import 'package:menu_magician/models/menu_item_model.dart';
 import 'package:menu_magician/widgets/meal_dropdown.dart';
 
 import '../controllers/menu_controller.dart';
+import '../services/shared_preference.dart';
 import '../utils/border_utils.dart';
 import '../utils/meal_utils.dart';
 import '../widgets/show_hide_menu_items.dart';
@@ -128,7 +129,7 @@ class _SpinPageState extends State<SpinPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   TextButton.icon(
                     onPressed: () {
                       showDialog(
@@ -201,6 +202,7 @@ class _SpinPageState extends State<SpinPage> {
                               selectionMade = true;
                               spinning = false;
                             });
+                            saveMenu();
                           },
                           items: [
                             for (var item in menuItemsNames)
@@ -214,69 +216,72 @@ class _SpinPageState extends State<SpinPage> {
                       ),
               ),
               const SizedBox(height: 50.0),
-              SizedBox(
-                  width: 350.0,
-                  child: selectionMade
-                      ? RichText(
-                          text: TextSpan(
-                              text: 'You are eating ',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.normal,
-                                fontStyle: FontStyle.italic,
-                              ),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: selectedMenuItem,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.lightGreen[900],
-                                    fontStyle: FontStyle.normal,
-                                  ),
-                                ),
-                                const TextSpan(
-                                  text: 'for your',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                                TextSpan(
-                                  text: ' ${meal.mealName}!',
-                                  style: TextStyle(
-                                    color: Colors.lightGreen[900],
-                                    fontStyle: FontStyle.normal,
-                                  ),
-                                ),
-                                const TextSpan(
-                                  text: '\n\nSpin again if you don\'t like it!',
-                                  style: TextStyle(
+              menuItemsNames.length > 2
+                  ? SizedBox(
+                      width: 350.0,
+                      child: selectionMade
+                          ? RichText(
+                              text: TextSpan(
+                                  text: 'You are eating ',
+                                  style: const TextStyle(
                                     color: Colors.black,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.normal,
                                     fontStyle: FontStyle.italic,
                                   ),
-                                ),
-                              ]),
-                          textAlign: TextAlign.center,
-                        )
-                      : initialSpin
-                          ? const Text(
-                              'Spin the wheel to decide what to eat!',
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: selectedMenuItem,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.lightGreen[900],
+                                        fontStyle: FontStyle.normal,
+                                      ),
+                                    ),
+                                    const TextSpan(
+                                      text: 'for your',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                    TextSpan(
+                                      text: ' ${meal.mealName}!',
+                                      style: TextStyle(
+                                        color: Colors.lightGreen[900],
+                                        fontStyle: FontStyle.normal,
+                                      ),
+                                    ),
+                                    const TextSpan(
+                                      text:
+                                          '\n\nSpin again if you don\'t like it!',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                    ),
+                                  ]),
                               textAlign: TextAlign.center,
                             )
-                          : const Text(
-                              'Spinning...',
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center,
-                            )),
+                          : initialSpin
+                              ? const Text(
+                                  'Spin the wheel to decide what to eat!',
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                )
+                              : const Text(
+                                  'Spinning...',
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ))
+                  : const SizedBox.shrink(),
               const SizedBox(height: 20.0),
-              !spinning
+              !spinning && menuItemsNames.length > 2
                   ? ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -294,10 +299,28 @@ class _SpinPageState extends State<SpinPage> {
                           : const Text('Spin Again'),
                     )
                   : const SizedBox.shrink(),
+              ElevatedButton(
+                onPressed: () {
+                  showMenu();
+                },
+                child: const Text('Show Menu'),
+              )
             ],
           ),
         ),
       ),
+    );
+  }
+
+  void showMenu() async {
+    String menu = '';
+    menu = await SharedPreferenceService.getMenuItem(meal.mealName);
+  }
+
+  void saveMenu() async {
+    await SharedPreferenceService.setMenuItem(
+      meal.mealName,
+      selectedMenuItem,
     );
   }
 
