@@ -32,13 +32,16 @@ class _SpinPageState extends State<SpinPage> {
   late List<MenuItem> menuItems;
   List<String> menuItemsNames = [];
 
+  // For the menu selection
   String selectedMenuItem = '';
   int selectedMenuItemIndex = 0;
   bool selectionMade = false;
 
+  // For the wheel
   bool initialSpin = true;
   bool spinning = false;
 
+  // Controllers
   MenuItemController menuItemController = Get.put(MenuItemController());
   StreamController<int> selected = StreamController.broadcast();
   Random random = Random();
@@ -46,8 +49,17 @@ class _SpinPageState extends State<SpinPage> {
   @override
   void initState() {
     super.initState();
-    meal = widget.meal ?? getMealFromTime();
+    // meal = widget.meal ?? getMealFromTime();
+    meal = widget.meal ?? Meals.lunch;
     getMenuItems();
+    showMenu().then((value) {
+      if (value != null) {
+        setState(() {
+          selectedMenuItem = value;
+          selectionMade = true;
+        });
+      }
+    });
     selected.stream.listen((value) {});
   }
 
@@ -72,8 +84,9 @@ class _SpinPageState extends State<SpinPage> {
       menuItemsNames = [];
       getMenuItems();
       initialSpin = true;
-      selectionMade = false;
       spinning = false;
+
+      selectionMade = false;
     });
   }
 
@@ -93,6 +106,28 @@ class _SpinPageState extends State<SpinPage> {
       default:
         return menuItemController.lunchMenu;
     }
+  }
+
+  Future<String?> showMenu() async {
+    String? menu;
+    menu = await SharedPreferenceService.getMenuItem(meal.mealName);
+    print('Menu: $menu');
+    return menu;
+  }
+
+  void saveMenu() async {
+    await SharedPreferenceService.setMenuItem(
+      meal.mealName,
+      selectedMenuItem,
+    );
+  }
+
+  void spinWheel() {
+    selectedMenuItemIndex = Fortune.randomInt(0, menuItemsNames.length);
+    setState(() {
+      selected.add(selectedMenuItemIndex);
+      selectedMenuItem = menuItemsNames[selectedMenuItemIndex];
+    });
   }
 
   @override
@@ -310,25 +345,5 @@ class _SpinPageState extends State<SpinPage> {
         ),
       ),
     );
-  }
-
-  void showMenu() async {
-    String menu = '';
-    menu = await SharedPreferenceService.getMenuItem(meal.mealName);
-  }
-
-  void saveMenu() async {
-    await SharedPreferenceService.setMenuItem(
-      meal.mealName,
-      selectedMenuItem,
-    );
-  }
-
-  void spinWheel() {
-    selectedMenuItemIndex = Fortune.randomInt(0, menuItemsNames.length);
-    setState(() {
-      selected.add(selectedMenuItemIndex);
-      selectedMenuItem = menuItemsNames[selectedMenuItemIndex];
-    });
   }
 }
