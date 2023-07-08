@@ -49,15 +49,12 @@ class _SpinPageState extends State<SpinPage> {
   @override
   void initState() {
     super.initState();
-    // meal = widget.meal ?? getMealFromTime();
-    meal = widget.meal ?? Meals.lunch;
+    meal = widget.meal ?? getMealFromTime();
     getMenuItems();
     showMenu().then((value) {
       if (value != null) {
-        setState(() {
-          selectedMenuItem = value;
-          selectionMade = true;
-        });
+        selectedMenuItem = value;
+        selectionMade = true;
       }
     });
     selected.stream.listen((value) {});
@@ -83,10 +80,20 @@ class _SpinPageState extends State<SpinPage> {
       meal = value;
       menuItemsNames = [];
       getMenuItems();
-      initialSpin = true;
-      spinning = false;
-
-      selectionMade = false;
+      showMenu().then((value) {
+        print(value != null);
+        print(value);
+        if (value != null) {
+          selectedMenuItem = value;
+          selectionMade = true;
+          initialSpin = true;
+          spinning = false;
+        } else {
+          initialSpin = true;
+          spinning = false;
+          selectionMade = false;
+        }
+      });
     });
   }
 
@@ -111,7 +118,6 @@ class _SpinPageState extends State<SpinPage> {
   Future<String?> showMenu() async {
     String? menu;
     menu = await SharedPreferenceService.getMenuItem(meal.mealName);
-    print('Menu: $menu');
     return menu;
   }
 
@@ -120,6 +126,8 @@ class _SpinPageState extends State<SpinPage> {
       meal.mealName,
       selectedMenuItem,
     );
+    String menu = await SharedPreferenceService.getMenuItem(meal.mealName);
+    print(menu);
   }
 
   void spinWheel() {
