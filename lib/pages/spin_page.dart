@@ -127,7 +127,6 @@ class _SpinPageState extends State<SpinPage> {
       selectedMenuItem,
     );
     String menu = await SharedPreferenceService.getMenuItem(meal.mealName);
-    print(menu);
   }
 
   void spinWheel() {
