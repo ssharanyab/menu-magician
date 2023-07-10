@@ -130,6 +130,7 @@ class _SpinPageState extends State<SpinPage> {
 
   Future<String?> showMenu() async {
     String? menu;
+    print('meal: ${meal.mealName}');
     menu = await SharedPreferenceService.getMenuItemName(meal.mealName);
     return menu;
   }

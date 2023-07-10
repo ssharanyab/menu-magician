@@ -1,13 +1,13 @@
-import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:menu_magician/pages/menu_page.dart';
 import 'package:menu_magician/pages/spin_page.dart';
 import 'package:menu_magician/utils/meal_utils.dart';
 
-import '../widgets/carousal_button.dart';
+import '../widgets/app_button_icon.dart';
 import '../widgets/carousal_card.dart';
 import '../widgets/drawer_list_tile.dart';
+import '../widgets/flip_plate_widgets.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -214,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Align(
                         alignment: Alignment.bottomRight,
-                        child: CarousalButton(
+                        child: AppButtonIcon(
                           label: 'Menu ',
                           icon: Icons.menu_book_rounded,
                           onPressed: () {
@@ -276,9 +276,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Align(
                           alignment: Alignment.bottomLeft,
-                          child: CarousalButton(
+                          child: AppButtonIcon(
                             label: 'Spin Now!',
-                            icon: Icons.gamepad,
+                            icon: Icons.rotate_left,
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -351,60 +351,23 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
+                  children: const [
                     FlipPlate(
                       meal: Meals.breakfast,
                       mealIcon: Icons.coffee_rounded,
                     ),
-                    FlipCard(
-                      fill: Fill.fillBack,
-                      direction: FlipDirection.HORIZONTAL, // default
-                      side: CardSide.FRONT,
-                      flipOnTouch: true, // The side to initially display.
-                      front: Container(
-                        width: 170.0,
-                        height: 170.0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
-                              blurRadius: 5.0,
-                              spreadRadius: 2.0,
-                            ),
-                          ],
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Lunch',
-                            style: TextStyle(
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      back: Container(
-                        width: 170.0,
-                        height: 170.0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.lightGreen,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
-                              blurRadius: 5.0,
-                              spreadRadius: 2.0,
-                            ),
-                          ],
-                        ),
-                      ),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    FlipPlate(
+                      meal: Meals.lunch,
+                      mealIcon: Icons.ramen_dining,
                     ),
                   ],
                 ),
-                const TodayPlate(
-                  plate: 'Dinner',
+                const FlipPlate(
+                  meal: Meals.dinner,
+                  mealIcon: Icons.fastfood,
                 ),
               ],
             ),
@@ -419,221 +382,6 @@ class _HomePageState extends State<HomePage> {
         color: Colors.lightGreen[200],
         height: 60.0,
       ),
-    );
-  }
-}
-
-class FlipPlate extends StatelessWidget {
-  const FlipPlate({
-    required this.meal,
-    required this.mealIcon,
-    super.key,
-  });
-
-  final Meals meal;
-  final IconData mealIcon;
-
-  @override
-  Widget build(BuildContext context) {
-    return FlipCard(
-      fill: Fill.fillBack,
-      direction: FlipDirection.HORIZONTAL, // default
-      side: CardSide.FRONT,
-      flipOnTouch: true, // The side to initially display.
-      front: Container(
-        width: 170.0,
-        height: 170.0,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.lightGreen[300],
-          border: Border.all(
-            color: Colors.black,
-            width: 2.0,
-          ),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                mealIcon,
-                size: 35.0,
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                meal.mealName,
-                style: const TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      back: Container(
-        width: 170.0,
-        height: 170.0,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.lightGreen[300],
-          border: Border.all(
-            color: Colors.black,
-            width: 2.0,
-          ),
-        ),
-        child: Center(
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Dosa',
-                  style: const TextStyle(
-                      fontSize: 24.0, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Text(
-                  'Dosa with mint chutney and sambar with a side of coconut chutney',
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    side: const BorderSide(
-                      color: Colors.black,
-                      width: 2.0,
-                    ),
-                    elevation: 0.0,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10.0),
-                      ),
-                    ),
-                  ),
-                  onPressed: () {},
-                  label: const Text(
-                    'Edit',
-                  ),
-                  icon: const Icon(
-                    Icons.edit,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class TodayPlate extends StatelessWidget {
-  const TodayPlate({
-    required this.plate,
-    super.key,
-  });
-
-  final String plate;
-
-  @override
-  Widget build(BuildContext context) {
-    return FlipCard(
-      fill: Fill.fillBack,
-      direction: FlipDirection.HORIZONTAL, // default
-      side: CardSide.FRONT,
-      flipOnTouch: true, // The side to initially display.
-      front: Container(
-        width: 170.0,
-        height: 170.0,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: 5.0,
-              spreadRadius: 2.0,
-            ),
-          ],
-        ),
-        child: Center(
-          child: Text(
-            plate,
-            style: const TextStyle(
-              fontSize: 24.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-      back: Container(
-          width: 170.0,
-          height: 170.0,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.lightGreen,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                blurRadius: 5.0,
-                spreadRadius: 2.0,
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 2.0,
-                  ),
-                ),
-                child: const CircleAvatar(
-                  backgroundColor: Colors.lightGreen,
-                  child: Text(
-                    'P',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              const Text(
-                'Pasta',
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              const Text(
-                'Pasta with tomato sauce',
-                style: TextStyle(
-                  fontSize: 16.0,
-                ),
-              ),
-            ],
-          )),
     );
   }
 }

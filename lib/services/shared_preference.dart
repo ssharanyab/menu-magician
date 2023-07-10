@@ -26,6 +26,6 @@ class SharedPreferenceService {
   }
 
   static getMenuItemId(String mealName) async {
-    return _sharedPreferences?.getInt('${mealName}Id') ?? 0;
+    return _sharedPreferences?.getInt('${mealName}Id') ?? -1;
   }
 }
