@@ -13,6 +13,7 @@ import '../services/shared_preference.dart';
 import '../utils/border_utils.dart';
 import '../utils/meal_utils.dart';
 import '../widgets/show_hide_menu_items.dart';
+import 'menu_page.dart';
 
 class SpinPage extends StatefulWidget {
   const SpinPage({
@@ -254,7 +255,15 @@ class _SpinPageState extends State<SpinPage> {
                               ),
                               elevation: 0.0,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => MenuPage(
+                                    index: meal.index,
+                                  ),
+                                ),
+                              );
+                            },
                             label: const Text('Add Items'),
                             icon: const Icon(CupertinoIcons.add_circled_solid),
                           ),
