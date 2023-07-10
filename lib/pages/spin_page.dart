@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:get/get.dart';
@@ -49,12 +50,17 @@ class _SpinPageState extends State<SpinPage> {
   @override
   void initState() {
     super.initState();
-    meal = widget.meal ?? getMealFromTime();
+    // meal = widget.meal ?? getMealFromTime();
+    meal = Meals.breakfast;
     getMenuItems();
     showMenu().then((value) {
-      if (value != null) {
-        selectedMenuItem = value;
-        selectionMade = true;
+      if (value != "") {
+        setState(() {
+          selectedMenuItem = value!;
+          selectionMade = true;
+          initialSpin = false;
+          spinning = false;
+        });
       }
     });
     selected.stream.listen((value) {});
@@ -81,17 +87,19 @@ class _SpinPageState extends State<SpinPage> {
       menuItemsNames = [];
       getMenuItems();
       showMenu().then((value) {
-        print(value != null);
-        print(value);
-        if (value != null) {
-          selectedMenuItem = value;
-          selectionMade = true;
-          initialSpin = true;
-          spinning = false;
+        if (value != "") {
+          setState(() {
+            selectedMenuItem = value!;
+            selectionMade = true;
+            initialSpin = false;
+            spinning = false;
+          });
         } else {
-          initialSpin = true;
-          spinning = false;
-          selectionMade = false;
+          setState(() {
+            selectionMade = false;
+            initialSpin = true;
+            spinning = false;
+          });
         }
       });
     });
@@ -185,35 +193,72 @@ class _SpinPageState extends State<SpinPage> {
                             );
                           });
                     },
-                    label: const Text(
-                      'Edit Items',
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                    icon: const Icon(
-                      Icons.edit,
-                      size: 16.0,
-                      color: Colors.black,
-                    ),
+                    label: menuItemsNames.length < 2
+                        ? const Text(
+                            'Add Items',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.black,
+                            ),
+                          )
+                        : const Text(
+                            'Edit Items',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.black,
+                            ),
+                          ),
+                    icon: menuItemsNames.length < 2
+                        ? const Icon(
+                            CupertinoIcons.add_circled_solid,
+                            size: 16.0,
+                            color: Colors.black,
+                          )
+                        : const Icon(
+                            Icons.edit,
+                            size: 16.0,
+                            color: Colors.black,
+                          ),
                   ),
                 ],
               ),
               const SizedBox(height: 30.0),
               SizedBox(
                 width: 300.0,
-                height: 300.0,
+                height: 350.0,
                 child: menuItemsNames.length < 2
-                    ? const Center(
-                        child: Text(
-                          'Please add and select at least 2 items to spin and decide!',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontStyle: FontStyle.italic,
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Please add and select at least 2 items to spin and decide!',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontStyle: FontStyle.italic,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
-                        ),
+                          const SizedBox(height: 35.0),
+                          ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              side: const BorderSide(
+                                width: 2.0,
+                                color: Colors.black,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20.0,
+                                vertical: 10.0,
+                              ),
+                              elevation: 0.0,
+                            ),
+                            onPressed: () {},
+                            label: const Text('Add Items'),
+                            icon: const Icon(CupertinoIcons.add_circled_solid),
+                          ),
+                        ],
                       )
                     : GestureDetector(
                         onTap: () => spinWheel(),
@@ -258,7 +303,7 @@ class _SpinPageState extends State<SpinPage> {
                       ),
               ),
               const SizedBox(height: 50.0),
-              menuItemsNames.length > 2
+              menuItemsNames.length >= 2
                   ? SizedBox(
                       width: 350.0,
                       child: selectionMade
@@ -281,7 +326,7 @@ class _SpinPageState extends State<SpinPage> {
                                       ),
                                     ),
                                     const TextSpan(
-                                      text: 'for your',
+                                      text: ' for your',
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.normal),
@@ -323,7 +368,7 @@ class _SpinPageState extends State<SpinPage> {
                                 ))
                   : const SizedBox.shrink(),
               const SizedBox(height: 20.0),
-              !spinning && menuItemsNames.length > 2
+              !spinning && menuItemsNames.length >= 2
                   ? ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -341,12 +386,6 @@ class _SpinPageState extends State<SpinPage> {
                           : const Text('Spin Again'),
                     )
                   : const SizedBox.shrink(),
-              ElevatedButton(
-                onPressed: () {
-                  showMenu();
-                },
-                child: const Text('Show Menu'),
-              )
             ],
           ),
         ),
