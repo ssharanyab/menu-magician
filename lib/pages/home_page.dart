@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:menu_magician/pages/menu_page.dart';
 import 'package:menu_magician/pages/spin_page.dart';
+import 'package:menu_magician/utils/meal_utils.dart';
 
 import '../widgets/carousal_button.dart';
 import '../widgets/carousal_card.dart';
@@ -351,50 +352,9 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    FlipCard(
-                      fill: Fill.fillBack,
-                      direction: FlipDirection.HORIZONTAL, // default
-                      side: CardSide.FRONT,
-                      flipOnTouch: true, // The side to initially display.
-                      front: Container(
-                        width: 170.0,
-                        height: 170.0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
-                              blurRadius: 5.0,
-                              spreadRadius: 2.0,
-                            ),
-                          ],
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Breakfast',
-                            style: TextStyle(
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      back: Container(
-                        width: 170.0,
-                        height: 170.0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.lightGreen,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
-                              blurRadius: 5.0,
-                              spreadRadius: 2.0,
-                            ),
-                          ],
-                        ),
-                      ),
+                    FlipPlate(
+                      meal: Meals.breakfast,
+                      mealIcon: Icons.coffee_rounded,
                     ),
                     FlipCard(
                       fill: Fill.fillBack,
@@ -458,6 +418,121 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: Container(
         color: Colors.lightGreen[200],
         height: 60.0,
+      ),
+    );
+  }
+}
+
+class FlipPlate extends StatelessWidget {
+  const FlipPlate({
+    required this.meal,
+    required this.mealIcon,
+    super.key,
+  });
+
+  final Meals meal;
+  final IconData mealIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    return FlipCard(
+      fill: Fill.fillBack,
+      direction: FlipDirection.HORIZONTAL, // default
+      side: CardSide.FRONT,
+      flipOnTouch: true, // The side to initially display.
+      front: Container(
+        width: 170.0,
+        height: 170.0,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.lightGreen[300],
+          border: Border.all(
+            color: Colors.black,
+            width: 2.0,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                mealIcon,
+                size: 35.0,
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
+              Text(
+                meal.mealName,
+                style: const TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      back: Container(
+        width: 170.0,
+        height: 170.0,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.lightGreen[300],
+          border: Border.all(
+            color: Colors.black,
+            width: 2.0,
+          ),
+        ),
+        child: Center(
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Dosa',
+                  style: const TextStyle(
+                      fontSize: 24.0, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Text(
+                  'Dosa with mint chutney and sambar with a side of coconut chutney',
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    side: const BorderSide(
+                      color: Colors.black,
+                      width: 2.0,
+                    ),
+                    elevation: 0.0,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                    ),
+                  ),
+                  onPressed: () {},
+                  label: const Text(
+                    'Edit',
+                  ),
+                  icon: const Icon(
+                    Icons.edit,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -15,11 +15,17 @@ class SharedPreferenceService {
     _sharedPreferences ??= await SharedPreferences.getInstance();
   }
 
-  static setMenuItem(String mealName, String menuItemsName) async {
+  static setMenuItem(
+      String mealName, String menuItemsName, int menuItemId) async {
     await _sharedPreferences?.setString(mealName, menuItemsName);
+    await _sharedPreferences?.setInt('${mealName}Id', menuItemId);
   }
 
-  static getMenuItem(String mealName) async {
+  static getMenuItemName(String mealName) async {
     return _sharedPreferences?.getString(mealName) ?? '';
+  }
+
+  static getMenuItemId(String mealName) async {
+    return _sharedPreferences?.getInt('${mealName}Id') ?? 0;
   }
 }

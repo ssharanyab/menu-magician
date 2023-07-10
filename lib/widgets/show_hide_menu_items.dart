@@ -11,14 +11,16 @@ class ShowHideMenuItems extends StatefulWidget {
     required this.meal,
     required this.menuItems,
     required this.selectedItems,
+    required this.selectedItemsId,
     required this.updateSelectedItems,
   });
 
   final Meals meal;
   final List<MenuItem>? menuItems;
   final List<String>? selectedItems;
+  final List<int?>? selectedItemsId;
 
-  final Function(List<String>) updateSelectedItems;
+  final Function(List<String>, List<int?>) updateSelectedItems;
 
   @override
   State<ShowHideMenuItems> createState() => _ShowHideMenuItemsState();
@@ -27,12 +29,14 @@ class ShowHideMenuItems extends StatefulWidget {
 class _ShowHideMenuItemsState extends State<ShowHideMenuItems> {
   List<MenuItem> items = [];
   List<String> selectedItems = [];
+  List<int?> selectedItemsId = [];
 
   @override
   void initState() {
     super.initState();
     items = widget.menuItems ?? [];
     selectedItems = widget.selectedItems ?? [];
+    selectedItemsId = widget.selectedItemsId ?? [];
   }
 
   @override
@@ -77,13 +81,16 @@ class _ShowHideMenuItemsState extends State<ShowHideMenuItems> {
                           final item = items[index];
                           final isSelected =
                               selectedItems.contains(item.itemName);
+
                           return ListTile(
                             onTap: () {
                               setState(() {
                                 if (isSelected) {
                                   selectedItems.remove(item.itemName);
+                                  selectedItemsId.remove(item.id);
                                 } else {
                                   selectedItems.add(item.itemName);
+                                  selectedItemsId.add(item.id);
                                 }
                               });
                             },
@@ -123,7 +130,7 @@ class _ShowHideMenuItemsState extends State<ShowHideMenuItems> {
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              widget.updateSelectedItems(selectedItems);
+              widget.updateSelectedItems(selectedItems, selectedItemsId);
               Navigator.of(context).pop(selectedItems);
             },
             child: Text('OK'),

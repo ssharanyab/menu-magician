@@ -97,4 +97,14 @@ class DatabaseHelper {
       return MenuItem.fromJson(maps[i]);
     });
   }
+
+  /// Get item from the database by id.
+  static Future<MenuItem>? getMenuItemById(int id) {
+    final db = _getDB();
+    return db.then((database) {
+      return database.query('MenuItems', where: 'id = ?', whereArgs: [id]);
+    }).then((maps) {
+      return MenuItem.fromJson(maps[0]);
+    });
+  }
 }

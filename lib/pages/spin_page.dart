@@ -33,10 +33,12 @@ class _SpinPageState extends State<SpinPage> {
   // For the menu
   late List<MenuItem> menuItems;
   List<String> menuItemsNames = [];
+  List<int?> menuItemsId = [];
 
   // For the menu selection
   String selectedMenuItem = '';
   int selectedMenuItemIndex = 0;
+  int? selectedMenuItemId;
   bool selectionMade = false;
 
   // For the wheel
@@ -71,12 +73,13 @@ class _SpinPageState extends State<SpinPage> {
     if (menuItems.length <= 10) {
       for (var e in menuItems) {
         menuItemsNames.add(e.itemName);
+        menuItemsId.add(e.id);
       }
     } else {
       for (int i = 0; i < 10; i++) {
         int randomIndex = random.nextInt(menuItems.length);
-        String randomElement = menuItems[randomIndex].itemName;
-        menuItemsNames.add(randomElement);
+        menuItemsNames.add(menuItems[randomIndex].itemName);
+        menuItemsId.add(menuItems[randomIndex].id);
       }
     }
   }
@@ -85,6 +88,7 @@ class _SpinPageState extends State<SpinPage> {
     setState(() {
       meal = value;
       menuItemsNames = [];
+      menuItemsId = [];
       getMenuItems();
       showMenu().then((value) {
         if (value != "") {
@@ -105,8 +109,9 @@ class _SpinPageState extends State<SpinPage> {
     });
   }
 
-  void updateMenuItems(List<String> selectedItems) {
+  void updateMenuItems(List<String> selectedItems, List<int?> selectedIndexes) {
     menuItemsNames = selectedItems;
+    menuItemsId = selectedIndexes;
     setState(() {});
   }
 
@@ -125,7 +130,7 @@ class _SpinPageState extends State<SpinPage> {
 
   Future<String?> showMenu() async {
     String? menu;
-    menu = await SharedPreferenceService.getMenuItem(meal.mealName);
+    menu = await SharedPreferenceService.getMenuItemName(meal.mealName);
     return menu;
   }
 
@@ -133,8 +138,8 @@ class _SpinPageState extends State<SpinPage> {
     await SharedPreferenceService.setMenuItem(
       meal.mealName,
       selectedMenuItem,
+      selectedMenuItemId!,
     );
-    String menu = await SharedPreferenceService.getMenuItem(meal.mealName);
   }
 
   void spinWheel() {
@@ -142,6 +147,7 @@ class _SpinPageState extends State<SpinPage> {
     setState(() {
       selected.add(selectedMenuItemIndex);
       selectedMenuItem = menuItemsNames[selectedMenuItemIndex];
+      selectedMenuItemId = menuItemsId[selectedMenuItemIndex];
     });
   }
 
@@ -189,6 +195,7 @@ class _SpinPageState extends State<SpinPage> {
                               meal: meal,
                               menuItems: menuItems,
                               selectedItems: menuItemsNames,
+                              selectedItemsId: menuItemsId,
                               updateSelectedItems: updateMenuItems,
                             );
                           });
