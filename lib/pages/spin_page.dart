@@ -51,8 +51,7 @@ class _SpinPageState extends State<SpinPage> {
   @override
   void initState() {
     super.initState();
-    // meal = widget.meal ?? getMealFromTime();
-    meal = Meals.breakfast;
+    meal = widget.meal ?? getMealFromTime();
     getMenuItems();
     showMenu().then((value) {
       if (value != "") {
