@@ -130,7 +130,7 @@ class _SpinPageState extends State<SpinPage> {
 
   Future<String?> showMenu() async {
     String? menu;
-    print('meal: ${meal.mealName}');
+
     menu = await SharedPreferenceService.getMenuItemName(meal.mealName);
     return menu;
   }
@@ -159,6 +159,15 @@ class _SpinPageState extends State<SpinPage> {
       appBar: AppBar(
         backgroundColor: Colors.lightGreen[100],
         elevation: 0.0,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+          ),
+        ),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,

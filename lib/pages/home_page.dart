@@ -233,7 +233,7 @@ class _HomePageState extends State<HomePage> {
                                     (context, animation1, animation2) =>
                                         const MenuPage(),
                               ),
-                            );
+                            ).then((value) => setState(() {}));
                           },
                         ),
                       ),
@@ -277,12 +277,13 @@ class _HomePageState extends State<HomePage> {
                       Align(
                           alignment: Alignment.bottomLeft,
                           child: AppButtonIcon(
-                            label: 'Spin Now!',
+                            label: 'Spin',
                             icon: Icons.rotate_left,
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 PageRouteBuilder(
+                                  maintainState: false,
                                   transitionsBuilder: (context, animation1,
                                           animation2, child) =>
                                       SlideTransition(
@@ -295,7 +296,9 @@ class _HomePageState extends State<HomePage> {
                                       (context, animation1, animation2) =>
                                           const SpinPage(),
                                 ),
-                              );
+                              ).then((_) {
+                                setState(() {});
+                              });
                             },
                           )),
                       Align(
@@ -335,7 +338,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(
-              height: 30.0,
+              height: 40.0,
             ),
             const Text(
               'Today on your plate:',
@@ -343,6 +346,7 @@ class _HomePageState extends State<HomePage> {
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
               ),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(
               height: 30.0,
@@ -377,11 +381,10 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      // Make a bottombar
-      bottomNavigationBar: Container(
-        color: Colors.lightGreen[200],
-        height: 60.0,
-      ),
+      // bottomNavigationBar: Container(
+      //   color: Colors.lightGreen[200],
+      //   height: 60.0,
+      // ),
     );
   }
 }

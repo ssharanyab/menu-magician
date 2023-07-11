@@ -1,6 +1,7 @@
 import 'dart:core';
 
 import 'package:flip_card/flip_card.dart';
+import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_magician/services/shared_preference.dart';
 
@@ -30,23 +31,30 @@ class _FlipPlateState extends State<FlipPlate> {
 
   bool noSelectionMade = false;
 
-  @override
-  void initState() {
+  // FlipCardController _controller = FlipCardController();
+  final FlipCardController _controller = FlipCardController();
+
+  void getData() {
     getItemId(widget.meal.mealName).then((value) {
       if (value != null) {
         setState(() {
           itemName = value.itemName ?? '';
           itemDescription = value.itemDescription ?? '';
         });
-        print('itemName: $itemName');
-        print('itemDescription: $itemDescription');
       } else {
         setState(() {
           noSelectionMade = true;
         });
       }
     });
+  }
 
+  @override
+  void initState() {
+    getData();
+    if (_controller.state?.isFront == false) {
+      _controller.controller?.reverse();
+    }
     super.initState();
   }
 
@@ -62,10 +70,22 @@ class _FlipPlateState extends State<FlipPlate> {
   @override
   Widget build(BuildContext context) {
     return FlipCard(
-      fill: Fill.fillBack,
+      fill: Fill.fillFront,
       direction: FlipDirection.HORIZONTAL, // default
       side: CardSide.FRONT,
       flipOnTouch: true, // The side to initially display.
+      onFlipDone: (isFront) {
+        setState(() {
+          getData();
+        });
+      },
+      onFlip: () {
+        setState(() {
+          getData();
+        });
+      },
+      controller: _controller,
+      alignment: Alignment.center,
       front: FlipPlateFront(
         mealIcon: widget.mealIcon,
         meal: widget.meal,
@@ -75,17 +95,23 @@ class _FlipPlateState extends State<FlipPlate> {
         itemDescription: itemDescription,
         noSelectionMade: noSelectionMade,
         meal: widget.meal,
+        onRefresh: () {
+          setState(() {
+            getData();
+          });
+        },
       ),
     );
   }
 }
 
-class FlipPlateBack extends StatelessWidget {
+class FlipPlateBack extends StatefulWidget {
   const FlipPlateBack({
     required this.itemName,
     required this.itemDescription,
     required this.noSelectionMade,
     required this.meal,
+    required this.onRefresh,
     super.key,
   });
 
@@ -93,7 +119,13 @@ class FlipPlateBack extends StatelessWidget {
   final String itemName;
   final String itemDescription;
   final bool noSelectionMade;
+  final VoidCallback onRefresh;
 
+  @override
+  State<FlipPlateBack> createState() => _FlipPlateBackState();
+}
+
+class _FlipPlateBackState extends State<FlipPlateBack> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -110,7 +142,7 @@ class FlipPlateBack extends StatelessWidget {
       child: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-          child: noSelectionMade
+          child: widget.noSelectionMade
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -141,10 +173,12 @@ class FlipPlateBack extends StatelessWidget {
                                         child: child),
                             pageBuilder: (context, animation1, animation2) =>
                                 SpinPage(
-                              meal: meal,
+                              meal: widget.meal,
                             ),
                           ),
-                        );
+                        ).then((value) {
+                          widget.onRefresh();
+                        });
                       },
                       icon: Icons.rotate_left,
                       label: 'Spin',
@@ -155,7 +189,7 @@ class FlipPlateBack extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      itemName,
+                      widget.itemName,
                       style: const TextStyle(
                           fontSize: 24.0, fontWeight: FontWeight.bold),
                     ),
@@ -163,7 +197,7 @@ class FlipPlateBack extends StatelessWidget {
                       height: 10.0,
                     ),
                     Text(
-                      itemDescription,
+                      widget.itemDescription,
                       maxLines: 2,
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
@@ -186,10 +220,12 @@ class FlipPlateBack extends StatelessWidget {
                                         child: child),
                             pageBuilder: (context, animation1, animation2) =>
                                 SpinPage(
-                              meal: meal,
+                              meal: widget.meal,
                             ),
                           ),
-                        );
+                        ).then((value) {
+                          widget.onRefresh();
+                        });
                       },
                       icon: Icons.edit,
                       label: 'Edit',
