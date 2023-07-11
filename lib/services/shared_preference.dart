@@ -28,4 +28,16 @@ class SharedPreferenceService {
   static getMenuItemId(String mealName) async {
     return _sharedPreferences?.getInt('${mealName}Id') ?? -1;
   }
+
+  static addTime(String time) async {
+    await _sharedPreferences?.setString('time', time);
+  }
+
+  static getTime() async {
+    return _sharedPreferences?.getString('time') ?? '-1';
+  }
+
+  static clearData() async {
+    await _sharedPreferences?.clear();
+  }
 }

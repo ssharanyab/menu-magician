@@ -40,6 +40,7 @@ class _FlipPlateState extends State<FlipPlate> {
         setState(() {
           itemName = value.itemName ?? '';
           itemDescription = value.itemDescription ?? '';
+          noSelectionMade = false;
         });
       } else {
         setState(() {
