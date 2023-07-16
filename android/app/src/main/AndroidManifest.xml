@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ssharanyab.menu_magician">
    <application
-        android:label="menu_magician"
+        android:label="Menu Magician"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
